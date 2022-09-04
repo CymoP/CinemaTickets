@@ -3,7 +3,7 @@ package uk.gov.dwp.uc.pairtest;
 import thirdparty.paymentgateway.TicketPaymentServiceImpl;
 import thirdparty.seatbooking.SeatReservationServiceImpl;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
-import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type;
+import uk.gov.dwp.uc.pairtest.enums.Type;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 
 public class TicketServiceImpl implements TicketService {
@@ -13,7 +13,6 @@ public class TicketServiceImpl implements TicketService {
   private int numberOfTickets;
   private boolean adultIsPresent;
   private int totalAmountToPay;
-  private int totalSeatsToAllocate;
   private TicketPaymentServiceImpl ticketPaymentService = new TicketPaymentServiceImpl();
   private SeatReservationServiceImpl seatReservationService = new SeatReservationServiceImpl();
   public static final int MAXIMUM_NUMBER_OF_TICKETS = 20;

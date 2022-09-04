@@ -16,7 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import thirdparty.paymentgateway.TicketPaymentServiceImpl;
 import thirdparty.seatbooking.SeatReservationServiceImpl;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
-import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type;
+import uk.gov.dwp.uc.pairtest.enums.Type;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 
 @RunWith(MockitoJUnitRunner.class)
