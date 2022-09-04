@@ -47,3 +47,27 @@ Provide a working implementation of a `TicketService` that:
 - Calculates the correct amount for the requested tickets and makes a payment request to the `TicketPaymentService`.  
 - Calculates the correct no of seats to reserve and makes a seat reservation request to the `SeatReservationService`.  
 - Rejects any invalid ticket purchase requests. It is up to you to identify what should be deemed as an invalid purchase request.
+
+---
+
+# Additional Notes
+
+## Required Technologies
+
+Java 17, Maven
+
+## Build information
+
+Application developed using Java 17 and can be built by using `mvn clean install`
+
+## Running Tests
+
+Tests can be run by using `mvn clean test`
+
+## Assumptions
+
+- A single account can request multiple tickets for the same type in the same request
+- Although an infant does not pay for a ticket or require a seat they still have a ticket and is counted towards the maximum of 20
+- The amount of infants does not matter in comparison the amount of adults or children provided there is at least one adult
+- Number of tickets cannot be less than 0 in TicketTypeRequest
+- Code doesn't have to be production-ready in that it does not need to have a main class, doesn't need to be containerised in docker etc
