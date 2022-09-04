@@ -1,5 +1,8 @@
 package uk.gov.dwp.uc.pairtest;
 
+import static uk.gov.dwp.uc.pairtest.utils.RequestValidation.checkAccountIdIsValid;
+import static uk.gov.dwp.uc.pairtest.utils.RequestValidation.checkAmountOfTicketsIsValid;
+
 import thirdparty.paymentgateway.TicketPaymentServiceImpl;
 import thirdparty.seatbooking.SeatReservationServiceImpl;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
@@ -15,8 +18,6 @@ public class TicketServiceImpl implements TicketService {
   private int totalAmountToPay;
   private TicketPaymentServiceImpl ticketPaymentService = new TicketPaymentServiceImpl();
   private SeatReservationServiceImpl seatReservationService = new SeatReservationServiceImpl();
-  public static final int MAXIMUM_NUMBER_OF_TICKETS = 20;
-  public static final int MINIMUM_NUMBER_OF_TICKETS = 0;
 
   /**
    * Should only have private methods other than the one below.
@@ -47,24 +48,11 @@ public class TicketServiceImpl implements TicketService {
       }
     }
 
-    checkAmountOfTicketsIsValid();
+    checkAmountOfTicketsIsValid(numberOfTickets);
     checkAdultIsPresent();
 
     ticketPaymentService.makePayment(accountId, totalAmountToPay);
     seatReservationService.reserveSeat(accountId, numberOfSeatsRequired);
-  }
-
-  private void checkAmountOfTicketsIsValid() {
-    if (numberOfTickets <= MINIMUM_NUMBER_OF_TICKETS
-        || numberOfTickets > MAXIMUM_NUMBER_OF_TICKETS) {
-      throw new InvalidPurchaseException();
-    }
-  }
-
-  private static void checkAccountIdIsValid(Long accountId) {
-    if (accountId == null || accountId <= 0) {
-      throw new InvalidPurchaseException();
-    }
   }
 
   private void checkAdultIsPresent() {
