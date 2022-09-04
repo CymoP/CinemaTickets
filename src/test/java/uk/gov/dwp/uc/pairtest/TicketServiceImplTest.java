@@ -39,7 +39,17 @@ public class TicketServiceImplTest extends TestCase {
 
   @Test
   public void testTicketsAreBookedWhenRequestIsValid() {
-    givenValidAccountId();
+    givenValidAccountId(123L);
+    givenValidTicketTypeRequest();
+    whenPurchaseTicketsIsCalled();
+    thenVerifyTicketPaymentServiceImplIsCalled();
+    thenVerifySeatReservationServiceImplIsCalled();
+    thenVerifyTicketPriceIsCalculatedCorrectly();
+  }
+
+  @Test
+  public void testTicketsAreBookedWhenRequestIsValid_MaxAccountId() {
+    givenValidAccountId(Long.MAX_VALUE);
     givenValidTicketTypeRequest();
     whenPurchaseTicketsIsCalled();
     thenVerifyTicketPaymentServiceImplIsCalled();
@@ -49,14 +59,14 @@ public class TicketServiceImplTest extends TestCase {
 
   @Test(expected = InvalidPurchaseException.class)
   public void testInvalidPurchaseExceptionIsThrownWhenRequestIsInvalid_AccountIdLessThanZero() {
-    givenInvalidAccountId((long) -1);
+    givenInvalidAccountId(-1L);
     givenValidTicketTypeRequest();
     whenPurchaseTicketsIsCalled();
   }
 
   @Test(expected = InvalidPurchaseException.class)
   public void testInvalidPurchaseExceptionIsThrownWhenRequestIsInvalid_AccountIdIsZero() {
-    givenInvalidAccountId((long) 0);
+    givenInvalidAccountId(0L);
     givenValidTicketTypeRequest();
     whenPurchaseTicketsIsCalled();
   }
@@ -69,35 +79,42 @@ public class TicketServiceImplTest extends TestCase {
   }
 
   @Test(expected = InvalidPurchaseException.class)
+  public void testInvalidPurchaseExceptionIsThrownWhenRequestIsInvalid_AccountIdAboveMaximum() {
+    givenInvalidAccountId(Long.MAX_VALUE + 1L);
+    givenValidTicketTypeRequest();
+    whenPurchaseTicketsIsCalled();
+  }
+
+  @Test(expected = InvalidPurchaseException.class)
   public void testInvalidPurchaseExceptionIsThrownWhenRequestIsInvalid_NumberOfTicketsGreaterThan20() {
-    givenValidAccountId();
+    givenValidAccountId(123L);
     givenInvalidTicketTypeRequest(21);
     whenPurchaseTicketsIsCalled();
   }
 
   @Test(expected = InvalidPurchaseException.class)
   public void testInvalidPurchaseExceptionIsThrownWhenRequestIsInvalid_NumberOfTicketsIsZero() {
-    givenValidAccountId();
+    givenValidAccountId(123L);
     givenInvalidTicketTypeRequest(0);
     whenPurchaseTicketsIsCalled();
   }
 
   @Test(expected = InvalidPurchaseException.class)
   public void testInvalidPurchaseExceptionIsThrownWhenRequestIsInvalid_NumberOfTicketsIsNull() {
-    givenValidAccountId();
+    givenValidAccountId(123L);
     whenPurchaseTicketsIsCalled();
   }
 
   @Test(expected = InvalidPurchaseException.class)
   public void testInvalidPurchaseExceptionIsThrownWhenRequestIsInvalid_InfantTicketButNoAdult() {
-    givenValidAccountId();
+    givenValidAccountId(123L);
     givenInvalidTicketTypeRequest(Type.INFANT);
     whenPurchaseTicketsIsCalled();
   }
 
   @Test(expected = InvalidPurchaseException.class)
   public void testInvalidPurchaseExceptionIsThrownWhenRequestIsInvalid_ChildTicketButNoAdult() {
-    givenValidAccountId();
+    givenValidAccountId(123L);
     givenInvalidTicketTypeRequest(Type.CHILD);
     whenPurchaseTicketsIsCalled();
   }
@@ -121,8 +138,8 @@ public class TicketServiceImplTest extends TestCase {
     ticketTypeRequestsList = new TicketTypeRequest[]{ticketTypeRequest1};
   }
 
-  private void givenValidAccountId() {
-    accountId = 123L;
+  private void givenValidAccountId(Long accountId) {
+    this.accountId = accountId;
   }
 
   private void givenInvalidAccountId(Long accountId) {
